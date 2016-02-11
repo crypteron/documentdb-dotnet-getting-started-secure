@@ -1,8 +1,14 @@
 # Crypteron + DocumentDB = rapid development of highly secure cloud apps
 
-This is a quick demo showing how to use Crypteron CipherObject to secure data in DocumentDB. Enabling pervasive encryption with just a couple of lines of code, Crypteron’s Security Framework transparently handles all aspects of privacy, tamper protection, secure key distribution, secure key storage, access controls, audit logs, key revocations, key rotations and more. The NuGet package is Crypteron.CipherObject
+This is a quick demo showing how to use Crypteron CipherObject to secure data in DocumentDB. Enabling pervasive encryption with just a couple of lines of code, Crypteron’s Security Framework transparently handles all aspects of privacy, tamper protection, secure key distribution, secure key storage, access controls, audit logs, key revocations, key rotations and more. The NuGet package is `Crypteron.CipherObject`.
 
 Observe the `GeneticCondition` field when you run this sample app. Before deleting the database at the end, compare the console output with the at-rest storage data (e.g. via portal.azure.com => DocumentDB => Document Explorer). Other than your own code, everyone else only sees strongly encrypted data.
+
+Data-in-use
+![Data-in-use](./media/data-in-use.png)
+
+Data-at-rest as well as Data-in-transit
+![Data-at-rest-and-in-transit](./media/data-at-rest-and-in-transit.png)
 
 ## Current limitations
 
@@ -15,8 +21,6 @@ If you have `thisObject.SSN`, Crypteron.CipherObject.Seal(thisObject) will suffi
 ### `JObject` type is not supported
 
 If writing objects of type `T` (which contains `Secure` properties), when reading them back they should also be of the same type `T`. Return type of `JObject` is currently not supported for decryption of secured values. This means instead of `client.CreateDocumentQuery(...)` one should use something like `client.CreateDocumentQuery<Family>(...)` before `Unseal`ing the result objects.
-
-----
 
 ## Original README.md below
 

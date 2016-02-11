@@ -70,6 +70,14 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CipherCore, Version=2015.11.5785.41265, Culture=neutral, PublicKeyToken=e0287981ec67bb47, processorArchitecture=MSIL">
+      <HintPath>..\packages\CipherCore.2015.11.1.0\lib\net45\CipherCore.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CipherObject, Version=2015.11.5785.41267, Culture=neutral, PublicKeyToken=e0287981ec67bb47, processorArchitecture=MSIL">
+      <HintPath>..\packages\CipherObject.2015.11.1.0\lib\net45\CipherObject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Azure.Documents.Client, Version=1.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Azure.DocumentDB.1.4.1\lib\net40\Microsoft.Azure.Documents.Client.dll</HintPath>
@@ -129,7 +137,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SlowCheetahTargets)" Condition="Exists('$(SlowCheetahTargets)')" Label="SlowCheetah" />

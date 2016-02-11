@@ -9,6 +9,8 @@
 // OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.  
 //---------------------------------------------------------------------------------
 
+using Crypteron;
+
 namespace DocumentDB.GetStarted
 {
     using System;
@@ -119,8 +121,11 @@ namespace DocumentDB.GetStarted
                         } 
                     },
                     Address = new Address { State = "WA", County = "King", City = "Seattle" },
-                    IsRegistered = true
+                    IsRegistered = true,
+                    GeneticCondition = "diabetes"
                 };
+
+                Crypteron.CipherObject.Seal(andersonFamily); // or andersonFamily.Seal()
 
                 // id based routing for the first argument, "dbs/FamilyRegistry/colls/FamilyCollection"
                 await client.CreateDocumentAsync("dbs/" + database.Id + "/colls/" + documentCollection.Id, andersonFamily);
@@ -160,8 +165,10 @@ namespace DocumentDB.GetStarted
                         }
                     },
                     Address = new Address { State = "NY", County = "Manhattan", City = "NY" },
-                    IsRegistered = false
+                    IsRegistered = false,
                 };
+
+                Crypteron.CipherObject.Seal(wakefieldFamily); // or wakefieldFamily.Seal()                
 
                 // id based routing for the first argument, "dbs/FamilyRegistry/colls/FamilyCollection"
                 await client.CreateDocumentAsync("dbs/" + database.Id + "/colls/" + documentCollection.Id, wakefieldFamily);
@@ -170,39 +177,47 @@ namespace DocumentDB.GetStarted
             }
 
             // Query the documents using DocumentDB SQL for the Andersen family
-            var families = client.CreateDocumentQuery("dbs/" + database.Id + "/colls/" + documentCollection.Id,
+            var families = client.CreateDocumentQuery<Family>("dbs/" + database.Id + "/colls/" + documentCollection.Id,
                 "SELECT * " +
                 "FROM Families f " +
                 "WHERE f.id = \"AndersenFamily\"");
 
             foreach (var family in families)
             {
-                Console.WriteLine("\tRead {0} from SQL", family);
+                Console.WriteLine("\tRead {0} from SQL", JsonConvert.SerializeObject(family.Unseal(), Formatting.Indented));
             }
 
             // Query the documents using LINQ for the Andersen family
             families =
-                from f in client.CreateDocumentQuery("dbs/" + database.Id + "/colls/" + documentCollection.Id)
+                from f in client.CreateDocumentQuery<Family>("dbs/" + database.Id + "/colls/" + documentCollection.Id)
                 where f.Id == "AndersenFamily"
                 select f;
 
             foreach (var family in families)
             {
-                Console.WriteLine("Read {0} from LINQ", family);
+                Console.WriteLine("Read {0} from LINQ", JsonConvert.SerializeObject(family.Unseal(), Formatting.Indented));
             }
 
             // Query the documents using LINQ lambdas for the Andersen family
-            families = client.CreateDocumentQuery("dbs/" + database.Id + "/colls/" + documentCollection.Id)
+            // Need to get results back in original class with Secure attributes
+            // Dynamic JObject is not currently supported
+            families = client.CreateDocumentQuery<Family>("dbs/" + database.Id + "/colls/" + documentCollection.Id)
                 .Where(f => f.Id == "AndersenFamily")
                 .Select(f => f);
 
             foreach (var family in families)
             {
-                Console.WriteLine("\tRead {0} from LINQ query", family);
+                Console.WriteLine("\tRead {0} from LINQ query", JsonConvert.SerializeObject(family.Unseal(), Formatting.Indented));
             }
 
             // Clean up/delete the database and client
-            await client.DeleteDatabaseAsync("dbs/" + database.Id);
+            Console.WriteLine("Done. Press 'd' to delete database prior to exiting");
+            var choice = Console.ReadKey().KeyChar;
+            if (choice == 'd' || choice == 'D')
+            {
+                Console.WriteLine("\nDeleting database ...");
+                await client.DeleteDatabaseAsync("dbs/" + database.Id);
+            }
             client.Dispose();
         }
 
@@ -249,6 +264,9 @@ namespace DocumentDB.GetStarted
             public Parent[] Parents { get; set; }
             public Child[] Children { get; set; }
             public Address Address { get; set; }
+
+            [Secure]
+            public string GeneticCondition { get; set; }
             public bool IsRegistered { get; set; }
         }
     }

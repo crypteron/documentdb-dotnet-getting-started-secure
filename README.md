@@ -4,11 +4,11 @@ This is a quick demo showing how to use Crypteron CipherObject to secure data in
 
 Observe the `GeneticCondition` field when you run this sample app. Before deleting the database at the end, compare the console output with the at-rest storage data (e.g. via portal.azure.com => DocumentDB => Document Explorer). Other than your own code, everyone else only sees strongly encrypted data.
 
-Data-in-use
-![Data-in-use](./media/data-in-use.png)
+### Data-in-use
+![Data-in-use](./media/data-in-use.png "Data-in-use")
 
-Data-at-rest as well as Data-in-transit
-![Data-at-rest-and-in-transit](./media/data-at-rest-and-in-transit.png)
+### Data-at-rest as well as in-transit
+![Data-at-rest-and-in-transit](./media/data-at-rest-and-in-transit.png "Data-at-rest as well as in-transit")
 
 ## Current limitations
 
@@ -24,11 +24,9 @@ If writing objects of type `T` (which contains `Secure` properties), when readin
 
 ## Original README.md below
 
----
 services: documentdb
 platforms: dotnet
 author: andrewhoh
----
 
 # Developing a .NET console app using DocumentDB
 This sample shows you how to use the Microsoft Azure DocumentDB service to store and access data from a .NET console application.

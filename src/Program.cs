@@ -106,8 +106,8 @@ namespace DocumentDB.GetStarted
                     Id = "AndersenFamily",
                     LastName = "Andersen",
                     Parents = new Parent[] {
-                        new Parent { FirstName = "Thomas" },
-                        new Parent { FirstName = "Mary Kay"}
+                        new Parent { FirstName = "Thomas" , SSN = "111-11-1111"}.Seal(),
+                        new Parent { FirstName = "Mary Kay", SSN = "222-22-2222"}.Seal()
                     },
                     Children = new Child[] {
                         new Child
@@ -233,6 +233,9 @@ namespace DocumentDB.GetStarted
         {
             public string FamilyName { get; set; }
             public string FirstName { get; set; }
+
+            [Secure]
+            public string SSN { get; set; }
         }
 
         internal sealed class Child
